@@ -9,7 +9,7 @@ const baseurl = "http://wfu.im";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { short:'', title: 'URL Shortener Service' });
 });
 /* Redirect to original url */
 router.get('/:code', function(req, res, next) {
@@ -39,17 +39,30 @@ router.post('/', function(req, res, next) {
   }
   if (validurl.isUri(original)) {
     if (!validurl.isUri(base)) {
-      res.status(400).json("invalid base url");
+      if(req.body.web) {
+        res.render('index', { error: 'invalid base url', title: 'URL Shortener Service' });
+      } else {
+        res.status(400).json("invalid base url");
+      }
     }
     shortener.findOne({ original: original, base: base }, function (err, data) {
-      if(err) { 
-        res.status(400).json(err) 
+      if(err) {
+        if(req.body.web) {
+          res.render('index', { error: err, title: 'URL Shortener Service' });
+        } else {
+          res.status(400).json("err");
+        }
       } else if(data) {
-        code = data.code
-        res.status(200).json({base, original, code});
+        var code = data.code
+        shorturl = base + "/" + code;
+        if(req.body.web) {
+          res.render('index', { short: shorturl, title: 'URL Shortener Service' });
+        } else {
+          res.status(200).json({base, original, code});
+        }
       } else {
         code = shortid.generate();
-        shortUrl = base + "/" + code;
+        shorturl = base + "/" + code;
           var data = new shortener({
             base,
             original,
@@ -57,15 +70,27 @@ router.post('/', function(req, res, next) {
           });
           data.save(function(err, data) {
             if(err) { 
-              res.status(400).json(err) 
+              if(req.body.web) {
+                res.render('index', { error: err, title: 'URL Shortener Service' });
+              } else {
+                res.status(400).json(err);
+              }
             } else {
-              res.status(200).json({base, original, code});
+              if(req.body.web) {
+                res.render('index', { short: shorturl, title: 'URL Shortener Service' });
+              } else {
+                res.status(200).json({base, original, code});
+              }
             }
           })
         }
       });
   } else {
-    res.status(400).json("invalid original url");
+    if(req.body.web) {
+      res.render('index', { error: 'invalid original url', title: 'URL Shortener Service' });
+    } else {
+      res.status(400).json("invalid original url");
+    }
   }
 });
 
