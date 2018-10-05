@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
  * @apiName get original url
  * @apiGroup Shortener
  * @apiExample {curl} Example usage:
- *     curl http://wfu.im/_YvSS5Ixs
+ *     curl http://wfu.im/YM5ctlUJo
  * @apiVersion 0.0.1
  */
 router.get('/:code', function(req, res, next) {
@@ -46,7 +46,7 @@ router.get('/:code', function(req, res, next) {
  * {
  *   "base": "http://wfu.im",
  *   "original": "http://google.com",
- *   "code": "_YvSS5Ixs"
+ *   "code": "YM5ctlUJo"
  * }
  * @apiParamExample {json} Request-Example:
  *     {

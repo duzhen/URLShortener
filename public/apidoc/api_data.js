@@ -48,14 +48,14 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n  \"base\": \"http://wfu.im\",\n  \"original\": \"http://google.com\",\n  \"code\": \"_YvSS5Ixs\"\n}",
+          "content": "{\n  \"base\": \"http://wfu.im\",\n  \"original\": \"http://google.com\",\n  \"code\": \"YM5ctlUJo\"\n}",
           "type": "json"
         }
       ]
     },
     "sampleRequest": [
       {
-        "url": "http://localhost:3000"
+        "url": "http://wfu.im"
       }
     ],
     "version": "0.0.1",
@@ -72,7 +72,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl http://localhost:3000/_YvSS5Ixs",
+        "content": "curl http://wfu.im/YM5ctlUJo",
         "type": "curl"
       }
     ],
