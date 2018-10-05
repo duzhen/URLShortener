@@ -11,7 +11,16 @@ const baseurl = "http://wfu.im";
 router.get('/', function(req, res, next) {
   res.render('index', { short:'', title: 'URL Shortener Service' });
 });
-/* Redirect to original url */
+
+/**
+ * @api {get} /:code Get Original URL
+ * @apiDescription Redirect to Original URL
+ * @apiName get original url
+ * @apiGroup Shortener
+ * @apiExample {curl} Example usage:
+ *     curl http://localhost:3000/_YvSS5Ixs
+ * @apiVersion 0.0.1
+ */
 router.get('/:code', function(req, res, next) {
   var code = req.params.code;
   shortener.findOne({ code: code }, function (err, data) {
@@ -25,7 +34,28 @@ router.get('/:code', function(req, res, next) {
   })
 });
 
-/* Call shortener service */
+/**
+ * @api {post} / Shortener URL
+ * @apiDescription Shortener URL
+ * @apiName Shortener url
+ * @apiGroup Shortener
+ * @apiParam {String} [base]  Optional Base URL.
+ * @apiParam {String} original  Original URL.
+ * @apiSuccess {json} result
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *   "base": "http://wfu.im",
+ *   "original": "http://google.com",
+ *   "code": "_YvSS5Ixs"
+ * }
+ * @apiParamExample {json} Request-Example:
+ *     {
+ *       "base": http://wfu.im,
+ *       "original": http:://google.com
+ *     }
+ * @apiSampleRequest http://localhost:3000
+ * @apiVersion 0.0.1
+ */
 router.post('/', function(req, res, next) {
   var original = req.body.original;
   var base = req.body.base;
