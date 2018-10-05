@@ -17,5 +17,9 @@
     "pug": "^2.0.3",
     "shortid": "^2.2.13",
     "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "should": "^13.2.3",
+    "supertest": "^3.3.0"
   }
 }

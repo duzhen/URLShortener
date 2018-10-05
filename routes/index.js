@@ -50,7 +50,7 @@ router.post('/', function(req, res, next) {
         if(req.body.web) {
           res.render('index', { error: err, title: 'URL Shortener Service' });
         } else {
-          res.status(400).json("err");
+          res.status(400).json(err);
         }
       } else if(data) {
         var code = data.code

@@ -5,9 +5,9 @@ append body
             label.sr-only(for='inputBaseUrl') http://wfu.im
             input#inputBase.form-control(name='base', placeholder='http://wfu.im')
             label.sr-only(for='inputUrl') URL
-            input#inputUrl.form-control(name='original', placeholder='URL', required='', autofocus='')
+            input#inputUrl.form-control(name='original', placeholder='Your original url here', required='', autofocus='')
             input#inputUrl.form-control(type='hidden', name='web', value='true')
-            button.btn.btn-lg.btn-primary.btn-block(type='submit') SHORTEN
+            button.btn.btn-lg.btn-primary.btn-block(type='submit') SHORTEN URL
         h3
             a(href=short)=short
         label.label-warning=error
