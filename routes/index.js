@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
  * @apiName get original url
  * @apiGroup Shortener
  * @apiExample {curl} Example usage:
- *     curl http://localhost:3000/_YvSS5Ixs
+ *     curl http://wfu.im/_YvSS5Ixs
  * @apiVersion 0.0.1
  */
 router.get('/:code', function(req, res, next) {
@@ -53,7 +53,7 @@ router.get('/:code', function(req, res, next) {
  *       "base": http://wfu.im,
  *       "original": http:://google.com
  *     }
- * @apiSampleRequest http://localhost:3000
+ * @apiSampleRequest http://wfu.im
  * @apiVersion 0.0.1
  */
 router.post('/', function(req, res, next) {
