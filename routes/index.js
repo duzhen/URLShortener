@@ -6,7 +6,7 @@ var shortener = require('../models/shortener.js');
 var router = express.Router();
 // redis
 var redisClient = require('redis').createClient;
-var redis = redisClient(6379, 'localhost');
+var redis = redisClient(6379, 'redis');
 //kafka
 var kafka = require('kafka-node');
 var Producer = kafka.Producer;
