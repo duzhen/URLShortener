@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development node ./bin/www",
-    "test": "NODE_ENV=test mocha"
+    "start": "cross-env NODE_ENV=development node ./bin/www",
+    "test": "cross-env NODE_ENV=test mocha",
+    "deploy": "cross-env NODE_ENV=production node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
