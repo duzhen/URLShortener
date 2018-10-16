@@ -5,6 +5,9 @@ var validurl = require("valid-url");
 var shortener = require('../models/shortener.js');
 var router = express.Router();
 
+var redisClient = require('redis').createClient;
+var redis = redisClient(6379, 'localhost');
+
 const baseurl = "http://wfu.im";
 
 /* GET home page. */
@@ -21,17 +24,26 @@ router.get('/', function(req, res, next) {
  *     curl http://wfu.im/YM5ctlUJo
  * @apiVersion 0.0.1
  */
-router.get('/:code', function(req, res, next) {
+router.get('/:code', function (req, res, next) {
   var code = req.params.code;
-  shortener.findOne({ code: code }, function (err, data) {
-    if(err) { 
-      res.status(400).json(err) 
-    } else if(data) {
-      res.redirect(data.original);
-    } else {
-      res.status(400).json("invalid short url");
+  redis.get(code, function (err, reply) {
+    if (err) res.status(400).json(err);
+    else if (reply)
+      res.redirect(reply);
+    else {
+      shortener.findOne({ code: code }, function (err, data) {
+        if (err) {
+          res.status(400).json(err)
+        } else if (data) {
+          redis.set(code, data.original, function() {
+            res.redirect(data.original);
+          });
+        } else {
+          res.status(400).json("invalid short url");
+        }
+      })
     }
-  })
+  });
 });
 
 /**
@@ -93,27 +105,30 @@ router.post('/', function(req, res, next) {
       } else {
         code = shortid.generate();
         shorturl = base + "/" + code;
-          var data = new shortener({
-            base,
-            original,
-            code
-          });
-          data.save(function(err, data) {
-            if(err) { 
-              if(req.body.web) {
-                res.render('index', { error: err, title: 'URL Shortener Service' });
-              } else {
-                res.status(400).json(err);
-              }
+        var data = new shortener({
+          base,
+          original,
+          code
+        });
+        data.save(function(err, data) {
+          console.log(data)
+          if(err) { 
+            if(req.body.web) {
+              res.render('index', { error: err, title: 'URL Shortener Service' });
             } else {
+              res.status(400).json(err);
+            }
+          } else {
+            redis.set(code, data.original, function() {
               if(req.body.web) {
                 res.render('index', { short: shorturl, title: 'URL Shortener Service' });
               } else {
                 res.status(200).json({base, original, code});
               }
-            }
-          })
-        }
+            });
+          }
+        })
+      }
       });
   } else {
     if(req.body.web) {
