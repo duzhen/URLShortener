@@ -11,7 +11,7 @@ var app = express();
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/shortener',  { useNewUrlParser: true });
+mongoose.connect('mongodb://mongodb:27017/shortener',  { useNewUrlParser: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
