@@ -26,12 +26,12 @@ services:
     ports:
       - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null
-    net: host
+    network_mode: host
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - 2181:2181
-    net: host
+    network_mode: host
   kafka:
     image: wurstmeister/kafka
     ports:
@@ -43,9 +43,9 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx256M -Xms128M"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    net: host
+    network_mode: host
   redis:
     image: redis
     ports:
       - "6379:6379"
-    net: host
+    network_mode: host
