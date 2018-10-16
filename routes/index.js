@@ -4,10 +4,42 @@ var validurl = require("valid-url");
 
 var shortener = require('../models/shortener.js');
 var router = express.Router();
-
+// redis
 var redisClient = require('redis').createClient;
 var redis = redisClient(6379, 'localhost');
-
+//kafka
+var kafka = require('kafka-node');
+var Producer = kafka.Producer;
+var kafkaClient = new kafka.Client();
+var producer = new Producer(kafkaClient);
+//consumer
+var kafka = require('kafka-node'),
+    Consumer = kafka.Consumer,
+    client = new kafka.Client(),
+    consumer = new Consumer(
+        client,
+        [
+            {topic: 'SHORTENER', partition: 0}
+        ],
+        {
+            autoCommit: true
+        }
+    );
+consumer.on('message', function (message) {
+  msg = JSON.parse(message['value']);
+  base = msg.base;
+  original = msg.original;
+  code = msg.code;
+  var data = new shortener({
+    base,
+    original,
+    code
+  });
+  data.save(function(err, data) {
+    if(err)
+      console.log(err)
+  });
+  });
 const baseurl = "http://wfu.im";
 
 /* GET home page. */
@@ -28,9 +60,9 @@ router.get('/:code', function (req, res, next) {
   var code = req.params.code;
   redis.get(code, function (err, reply) {
     if (err) res.status(400).json(err);
-    else if (reply)
+    else if (reply) {
       res.redirect(reply);
-    else {
+    } else {
       shortener.findOne({ code: code }, function (err, data) {
         if (err) {
           res.status(400).json(err)
@@ -105,13 +137,21 @@ router.post('/', function(req, res, next) {
       } else {
         code = shortid.generate();
         shorturl = base + "/" + code;
-        var data = new shortener({
-          base,
-          original,
-          code
-        });
-        data.save(function(err, data) {
-          console.log(data)
+        // var data = new shortener({
+        //   base,
+        //   original,
+        //   code
+        // });
+        // msg = JSON.stringify({'base':base, 'original':original, 'code':code})
+        msg = JSON.stringify({base, original, code})
+        var payload = [
+          {
+              topic: 'SHORTENER',
+              messages: msg,
+              partition: 0
+          }
+        ];
+        producer.send(payload, function (err, data) {
           if(err) { 
             if(req.body.web) {
               res.render('index', { error: err, title: 'URL Shortener Service' });
@@ -119,7 +159,7 @@ router.post('/', function(req, res, next) {
               res.status(400).json(err);
             }
           } else {
-            redis.set(code, data.original, function() {
+            redis.set(code, original, function() {
               if(req.body.web) {
                 res.render('index', { short: shorturl, title: 'URL Shortener Service' });
               } else {
@@ -127,7 +167,25 @@ router.post('/', function(req, res, next) {
               }
             });
           }
-        })
+        });
+
+        // data.save(function(err, data) {
+        //   if(err) { 
+        //     if(req.body.web) {
+        //       res.render('index', { error: err, title: 'URL Shortener Service' });
+        //     } else {
+        //       res.status(400).json(err);
+        //     }
+        //   } else {
+        //     redis.set(code, data.original, function() {
+        //       if(req.body.web) {
+        //         res.render('index', { short: shorturl, title: 'URL Shortener Service' });
+        //       } else {
+        //         res.status(200).json({base, original, code});
+        //       }
+        //     });
+        //   }
+        // })
       }
       });
   } else {
