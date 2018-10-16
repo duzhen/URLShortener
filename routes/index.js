@@ -1,7 +1,7 @@
 var express = require('express');
 var shortid = require("shortid");
 var validurl = require("valid-url");
-var config = require('../config')
+var config = require('../config/config')
 
 var shortener = require('../models/shortener.js');
 var router = express.Router();
