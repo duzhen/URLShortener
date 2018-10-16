@@ -10,6 +10,7 @@ cache:
 #   - redis-server
 env:
   - DOCKER_COMPOSE_VERSION=1.8.0
+  - NODE_ENV=test
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose

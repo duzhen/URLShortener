@@ -1,12 +1,13 @@
 var express = require('express');
 var shortid = require("shortid");
 var validurl = require("valid-url");
+var config = require('../config')
 
 var shortener = require('../models/shortener.js');
 var router = express.Router();
 // redis
 var redisClient = require('redis').createClient;
-var redis = redisClient(6379, 'redis');
+var redis = redisClient(6379, config.redis);
 //kafka
 var kafka = require('kafka-node');
 var Producer = kafka.Producer;
