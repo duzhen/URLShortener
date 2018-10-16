@@ -1,0 +1,43 @@
+version: '1'
+services:
+  shortener:
+    container_name: shortener
+    image: duzhen/shortener
+    ports:
+      - 80:80
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - 2181:2181
+  kafka:
+    image: wurstmeister/kafka
+    links: 
+      - zookeeper:zk
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_PORT: "9092"
+      KAFKA_ZOOKEEPER_CONNECT: zk:2181
+      KAFKA_CREATE_TOPICS: "SHORTENER:1:1:compact"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
