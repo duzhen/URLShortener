@@ -4,15 +4,15 @@ services:
     container_name: shortener
     image: duzhen/shortener
     links:
+      - kafka
       - mongodb
       - redis
-      - kafka
     ports:
       - 80:80
     depends_on:
+      - kafka
       - mongodb
       - redis
-      - kafka
     environment:
       NODE_ENV: production
   mongodb:
