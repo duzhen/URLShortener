@@ -1,32 +1,5 @@
 version: '2'
 services:
-  # shortener:
-  #   container_name: shortener
-  #   image: duzhen/shortener
-  #   links:
-  #     - mongodb
-  #     - redis
-  #     - kafka
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #     - mongodb
-  #     - redis
-  #     - kafka
-  #   environment:
-  #     NODE_ENV: production
-  mongodb:
-    image: mongo:latest
-    container_name: "mongodb"
-    environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
-    volumes:
-      - ./data/db:/data/db
-    ports:
-      - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null
-    network_mode: host
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
@@ -43,6 +16,18 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx256M -Xms128M"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: host
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null
     network_mode: host
   redis:
     image: redis

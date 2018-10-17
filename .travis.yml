@@ -22,9 +22,10 @@ before_install:
   # doing out-of-the-ordinary docker-compose builds.
   - docker-compose -f travis-docker-compose.yml pull
   # - docker-compose build
+  - docker-compose -f travis-docker-compose.yml run -d zookeeper
+  - docker-compose -f travis-docker-compose.yml run -d kafka
   - docker-compose -f travis-docker-compose.yml run -d mongodb
   - docker-compose -f travis-docker-compose.yml run -d redis
-  - docker-compose -f travis-docker-compose.yml run -d kafka
 
   # You will want this for logging. If one of your containers does not build for
   # whatever reason it's best to report that now before your tests start
