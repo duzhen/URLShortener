@@ -11,13 +11,13 @@ var redis = redisClient(6379, config.redis);
 //kafka
 var kafka = require('kafka-node');
 var Producer = kafka.Producer;
-var kafkaClient = new kafka.Client(config.zookeeper);
+var kafkaClient = new kafka.Client();//config.zookeeper);
 var producer = new Producer(kafkaClient);
-kafkaClient.refreshMetadata(['SHORTENER'], (err) => {
-  if (err) {
-      console.warn('Error refreshing kafka metadata', err);
-  }
-});
+// kafkaClient.refreshMetadata(['SHORTENER'], (err) => {
+//   if (err) {
+//       console.warn('Error refreshing kafka metadata', err);
+//   }
+// });
 //consumer
 var kafka = require('kafka-node'),
     Consumer = kafka.Consumer,
@@ -32,6 +32,7 @@ var kafka = require('kafka-node'),
         }
     );
 consumer.on('message', function (message) {
+  console.log(message)
   msg = JSON.parse(message['value']);
   base = msg.base;
   original = msg.original;
@@ -157,8 +158,10 @@ router.post('/', function(req, res, next) {
               partition: 0
           }
         ];
+        console.log(payload)
         producer.send(payload, function (err, data) {
           if(err) { 
+            console.log(err)
             if(req.body.web) {
               res.render('index', { error: err, title: 'URL Shortener Service' });
             } else {

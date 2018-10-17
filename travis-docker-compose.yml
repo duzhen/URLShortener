@@ -1,20 +1,20 @@
 version: '2'
 services:
-  shortener:
-    container_name: shortener
-    image: duzhen/shortener
-    links:
-      - mongodb
-      - redis
-      - kafka
-    ports:
-      - 80:80
-    depends_on:
-      - mongodb
-      - redis
-      - kafka
-    environment:
-      NODE_ENV: production
+  # shortener:
+  #   container_name: shortener
+  #   image: duzhen/shortener
+  #   links:
+  #     - mongodb
+  #     - redis
+  #     - kafka
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - mongodb
+  #     - redis
+  #     - kafka
+  #   environment:
+  #     NODE_ENV: production
   mongodb:
     image: mongo:latest
     container_name: "mongodb"
