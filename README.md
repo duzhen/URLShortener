@@ -4,29 +4,37 @@
 ## Dependency
 * NodeJs
 * Express
+* Redis
+* Kafka
 * MongoDB
 * Pug
 
 ## Environment Prepare
 ```
-net start MongoDB
+~~net start MongoDB~~
+docker-compose -v
 npm install mocha -g
 ```
 
 # Test
 ```
 mocha test
+or
+npm test
 ```
 
 # Running
  ```
  npm start
+ or
+ supervisor bin/www
  ```
  
  # Build docker
  ```
  docker build -t duzhen/shortener .
- docker run -d --name shortener --network=host -p 80:80 duzhen/shortener:latest
+ ~~docker run -d --name shortener --network=host -p 80:80 duzhen/shortener:latest~~
+ docker-compose up
  ```
  
  # AWS Demo
