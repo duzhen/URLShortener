@@ -11,7 +11,7 @@ var redis = redisClient(6379, config.redis);
 //kafka
 var kafka = require('kafka-node');
 var Producer = kafka.Producer;
-var kafkaClient = new kafka.Client();//config.zookeeper);
+var kafkaClient = new kafka.Client(config.zookeeper);
 var producer = new Producer(kafkaClient);
 // kafkaClient.refreshMetadata(['SHORTENER'], (err) => {
 //   if (err) {
