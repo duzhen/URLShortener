@@ -21,7 +21,7 @@ var producer = new Producer(kafkaClient);
 //consumer
 var kafka = require('kafka-node'),
     Consumer = kafka.Consumer,
-    client = new kafka.Client(),
+    client = new kafka.Client(config.zookeeper),
     consumer = new Consumer(
         client,
         [
