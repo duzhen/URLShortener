@@ -10,8 +10,8 @@
 * Pug
 
 ## Environment Prepare
-```
 ~~net start MongoDB~~
+```
 docker-compose -v
 npm install mocha -g
 ```
@@ -31,9 +31,9 @@ npm test
  ```
  
  # Build docker
+ ~~docker run -d --name shortener --network=host -p 80:80 duzhen/shortener:latest~~
  ```
  docker build -t duzhen/shortener .
- ~~docker run -d --name shortener --network=host -p 80:80 duzhen/shortener:latest~~
  docker-compose up
  ```
  
